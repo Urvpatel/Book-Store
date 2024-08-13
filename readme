@@ -1,0 +1,31 @@
+start-
+
+
+
+1st-in back end write npm init -y for package.json
+2nd-npm i express mongoose for MongoDB databases
+3rd- npm i dotenv for 
+4th- create one .env file in backend for PORT no    
+5th- create a new folder for connection i.e conn
+
+----connection -------
+6th- create a file for connection called conn.js for mongoose to be used ---------- new steps goto https://cloud.mongodb.com/ and login your account create new project and goto Network Access in that add a ip address and click allow access from any wehere and save status will be inactive now goto database and create new free cluster and type user name-LMS password-LMS123 than create user and now chose the Choose a connection method in that select I don't have MongoDB Compass installed and copy the link "mongodb+srv://LMS:LMS123@cluster0.bm3xrat.mongodb.net/"
+7th- and paste the URI in .env URI= mongodb+srv://LMS:LMS123@cluster0.bm3xrat.mongodb.net/ and add your folder name after / like URI= mongodb+srv://LMS:LMS123@cluster0.bm3xrat.mongodb.net/LMS
+----done with the data base ------
+
+----creating schema/models in database------
+8th- create a folder in backend i.e models and create a user.js file 
+9th- create a file called order.js
+10th- create a file called book.js
+
+----routes-----
+11th- create the folder routes and add a file user.js 
+
+--install thunder client in vs--
+12th- install goto new request choose post and write the url and send the request open your mongodb database goto collections and the data is sent successfully 
+
+--- for password encryption ----
+13th- npm i bcryptjs //we cant see the orignal user password but database can
+
+---- json webtokens ----
+14th- npm i jsonwebtoken
