@@ -69,7 +69,7 @@ router.get("/get-all-book", async (req,res) =>{
 //get 2 books 
 router.get("/get-recent-book", async (req,res) =>{
     try{
-        const books= await Book.find().sort({ createdAt: -1}).limit(2);
+        const books= await Book.find().sort({ createdAt: -1}).limit(4);
         return res.json({stauts:"success",data:books})}
     catch(error){
         return res.status(500).json({message :"An error has occured"})

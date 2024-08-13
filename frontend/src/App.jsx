@@ -2,17 +2,17 @@ import React from 'react'
 import Home from './pages/Home'
 import Footer from './components/Footer/Footer'
 import Navbar from './components/Navbar/Navbar'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import {  Routes, Route } from 'react-router-dom'
 import AllBooks from './pages/AllBooks'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Cart from './pages/Cart'
 import Profile from './pages/Profile'
+import ViewBookDetails from './components/ViewBookDetails/ViewBookDetails'
 
 const App = () => {
   return (
     <div>
-      <Router>
         <Navbar />
         <Routes>
           <Route exact path='/' element={<Home />} />
@@ -21,9 +21,9 @@ const App = () => {
           <Route  path='/Login' element={<Login />} />
           <Route  path='/Cart' element={<Cart />} />
           <Route  path='/Profile' element={<Profile  />} />
+          <Route path='view-book-details/:id' element={<ViewBookDetails/>}/>
         </Routes>
         <Footer />
-      </Router>
     </div>
   )
 }
