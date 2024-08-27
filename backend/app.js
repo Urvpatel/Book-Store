@@ -8,6 +8,7 @@ const books= require('./routes/book')
 const favourite= require('./routes/favourite')
 const cart= require('./routes/cart')
 const order= require('./routes/order')
+const category=require('./routes/category')
 app.use(cors())
 app.use(express.json())
 //routes
@@ -16,6 +17,7 @@ app.use('/api/v1',books)
 app.use('/api/v1',favourite)
 app.use('/api/v1',cart)
 app.use('/api/v1',order)
+app.use('/api/v1',category)
 
 //create port
 app.listen(process.env.PORT, () => {
