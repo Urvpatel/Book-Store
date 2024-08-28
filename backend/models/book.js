@@ -41,12 +41,16 @@ const book = new mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required: true, // Each book must belong to a category
-    }
+        required: true // Each book must belong to a category
+    },
+    subcategory: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubCategory',
+    },
 }, { timestamps: true }); // timestamps for sequential order
 
 // Pre-save hook to calculate the discounted price
-book.pre('save', function(next) {
+book.pre('save', function (next) {
     if (this.discount > 0) {
         this.discountedPrice = this.price - (this.price * (this.discount / 100));
     } else {

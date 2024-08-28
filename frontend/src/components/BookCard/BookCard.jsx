@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Box, Typography, Button } from '@mui/material';
 
 const BookCard = ({ data, favourite }) => {
   const headers = {
@@ -27,43 +28,97 @@ const BookCard = ({ data, favourite }) => {
   const discountedPrice = data.price - (data.price * (data.discount / 100));
 
   return (
-    <div className='bg-zinc-800 rounded p-4 flex flex-col'>
-      <Link to={`/view-book-details/${data._id}`}>
-        <div>
-          <div className='bg-zinc-900 rounded flex items-center justify-center'>
-            <img src={data.url} alt={data.title} className='h-[25vh]' />
-          </div>
-          <h2 className='mt-4 text-white text-xl font-semibold'>{data.title}</h2>
-          <p className='mt-2 text-zinc-400 font-semibold'>by {data.author}</p>
-          
-          {/* Price and Quantity Warning */}
-          <div className='mt-2 flex items-center'>
+    <Box
+      sx={{
+        padding: 2,
+        textAlign: 'center',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        cursor: 'pointer',
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': {
+          transform: 'scale(1.05)',
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.4)',
+        },
+        // backgroundColor: '#1e1e1e',
+        borderRadius: '8px',
+      }}
+    >
+      <Link to={`/view-book-details/${data._id}`} style={{ textDecoration: 'none' }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Box
+            sx={{
+              height: '300px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              // backgroundColor: '#121212',
+              borderRadius: '8px',
+            }}
+          >
+            <img
+              src={data.url}
+              alt={data.title}
+              style={{
+                maxHeight: '100%',
+                maxWidth: '100%',
+                objectFit: 'contain',
+              }}
+            />
+          </Box>
+          <Typography variant="h6" sx={{ mt: 2, color: 'white', fontWeight: 'bold' }}>
+            {data.title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#bbb' }}>
+            by {data.author}
+          </Typography>
+          <Box sx={{ mt: 2 }}>
             {data.discount > 0 ? (
               <>
-                <p className='text-zinc-200 font-semibold text-xl line-through mr-2'>Rs. {data.price}</p>
-                <p className='text-green-400 font-semibold text-xl'>Rs. {discountedPrice.toFixed(2)}</p>
+                <Typography variant="body2" sx={{ color: '#fbc02d', fontWeight: 'bold' }}>
+                  {data.discount}% OFF
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: '#bbb', textDecoration: 'line-through', display: 'inline-block', marginRight: '8px' }}
+                >
+                  ₹{data.price}
+                </Typography>
+                <Typography variant="h6" sx={{ color: '#fbc02d', fontWeight: 'bold', display: 'inline-block' }}>
+                  ₹{discountedPrice.toFixed(2)}
+                </Typography>
               </>
             ) : (
-              <p className='text-zinc-200 font-semibold text-xl'>Rs. {data.price}</p>
+              <Typography variant="h6" sx={{ color: '#fbc02d', fontWeight: 'bold' }}>
+                ₹{data.price}
+              </Typography>
             )}
             {data.quantity === 0 ? (
-              <p className='ml-4 text-red-500 font-semibold text-sm'>Out of Stock!</p>
+              <Typography variant="body2" sx={{ color: 'red', fontWeight: 'bold', mt: 1 }}>
+                Out of Stock!
+              </Typography>
             ) : data.quantity <= 5 && (
-              <p className='ml-4 text-red-500 font-semibold text-sm'>Only few left!</p>
+              <Typography variant="body2" sx={{ color: 'red', fontWeight: 'bold', mt: 1 }}>
+                Only few left!
+              </Typography>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Link>
-      
+
       {favourite && (
-        <button
-          className='bg-yellow-50 px-4 py-2 rounded border border-yellow-500 text-yellow-500 mt-4 hover:bg-yellow-100 transition duration-300'
+        <Button
+          variant="outlined"
+          color="warning"
+          sx={{ mt: 2 }}
           onClick={handleRemoveBook}
         >
           Remove from Favourites
-        </button>
+        </Button>
       )}
-    </div>
+    </Box>
   );
 };
 

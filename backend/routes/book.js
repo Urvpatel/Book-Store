@@ -3,7 +3,6 @@ const User=require("../models/user")
 const Book= require('../models/book')
 const {authenticateToken}= require('./userAuth'); 
 //add book by admin
-// In your backend route
 router.post("/add-book", authenticateToken, async (req, res) => {
     try {
         const { id } = req.headers;
@@ -12,7 +11,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
             return res.status(400).json({ message: "You don't have access to do admin work" });
         }
 
-        const { url, title, author, price, desc, language, quantity, discount, category } = req.body;
+        const { url, title, author, price, desc, language, quantity, discount, category, subcategory } = req.body;
 
         const book = new Book({
             url,
@@ -25,6 +24,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
             discount: discount || 0,
             discountedPrice: price - (price * (discount / 100)),
             category, // Reference the category
+            subcategory // Reference the subcategory
         });
 
         await book.save();
@@ -34,6 +34,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     }
 });
+
 
 //update book put is used becoz of update
 router.put("/update-book", authenticateToken, async (req, res) => {
@@ -49,6 +50,7 @@ router.put("/update-book", authenticateToken, async (req, res) => {
             quantity: req.body.quantity,
             discount: req.body.discount || 0,
             category: req.body.category, // Update category
+            subcategory: req.body.subcategory // Update subcategory
         };
 
         if (updatedData.discount > 0) {
@@ -57,17 +59,52 @@ router.put("/update-book", authenticateToken, async (req, res) => {
             updatedData.discountedPrice = updatedData.price;
         }
 
-        await Book.findByIdAndUpdate(bookid, updatedData);
-        res.status(200).json({ message: "Book updated successfully" });
+        const updatedBook = await Book.findByIdAndUpdate(bookid, updatedData, { new: true });
+
+        if (!updatedBook) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        res.status(200).json({ message: "Book updated successfully", data: updatedBook });
     } catch (error) {
-        res.status(500).json({ message: "An error has occurred" });
+        console.error("Internal Server Error:", error);
+        res.status(500).json({ message: "An error has occurred", error: error.message });
     }
 });
 
+
 // Get all books by category
+// Backend: Get books by category and optionally by subcategory
 router.get("/books-by-category/:categoryId", async (req, res) => {
     try {
-        const books = await Book.find({ category: req.params.categoryId }).sort({ createdAt: -1 });
+        const { categoryId } = req.params;
+        const { subCategoryId } = req.query;
+
+        let filter = { category: categoryId };
+
+        if (subCategoryId) {
+            filter['subcategories'] = subCategoryId;
+        }
+
+        const books = await Book.find(filter).sort({ createdAt: -1 });
+        res.json({ status: "success", data: books });
+    } catch (error) {
+        res.status(500).json({ message: "An error has occurred", error: error.message });
+    }
+});
+
+
+
+
+// Get all books by category and subcategory
+router.get("/books-by-category/:categoryId/:subcategoryId", async (req, res) => {
+    try {
+        const { categoryId, subcategoryId } = req.params;
+        const books = await Book.find({
+            category: categoryId,
+            subcategory: subcategoryId
+        }).sort({ createdAt: -1 });
+        
         res.json({ status: "success", data: books });
     } catch (error) {
         res.status(500).json({ message: "An error has occurred", error: error.message });
@@ -124,4 +161,21 @@ router.get("/get-book-by-id/:id", async (req,res) =>{
         return res.status(500).json({message :"An error has occured"})
     }
 })
+
+//search book by title or author
+router.get("/search-books", async (req, res) => {
+    try {
+        const searchTerm = req.query.q;
+        const books = await Book.find({
+            $or: [
+                { title: { $regex: searchTerm, $options: 'i' } },
+                { author: { $regex: searchTerm, $options: 'i' } }
+            ]
+        });
+        res.status(200).json({ data: books });
+    } catch (error) {
+        res.status(500).json({ message: "An error occurred while searching for books", error: error.message });
+    }
+});
+
 module.exports =router;
