@@ -17,6 +17,12 @@ import { authActions } from './store/auth'
 import AllOrders from './pages/AllOrders'
 import AddBook from './pages/AddBook'
 import UpdateBook from './pages/UpdateBook'
+<<<<<<< HEAD
+=======
+import AddCategories from './pages/AddCategories'
+import AllCategories from './pages/AllCategories'
+import BookListByCategory from './components/BookListByCategory/BookListByCategory'
+>>>>>>> b38785e597742122962a30f530ad549743115f38
 
 const App = () => {
   const dispatch = useDispatch()
@@ -42,6 +48,11 @@ const App = () => {
         <Route path='/profile' element={<Profile />} >
           {role === "user" ? <Route index element={<Favourites />} /> : <Route index element={<AllOrders />} />}
           {role === "admin" && <Route path='/profile/add-book' element={<AddBook />} />}
+<<<<<<< HEAD
+=======
+          {role === "admin" && <Route path='/profile/add-category' element={<AddCategories />} />}
+          {role === "admin" && <Route path='/profile/all-category' element={<AllCategories />} />}
+>>>>>>> b38785e597742122962a30f530ad549743115f38
           <Route path='/profile/orderHistory' element={<UserOrderHistory />} />
           <Route path='/profile/settings' element={<Settings />} />
         </Route>
@@ -49,6 +60,12 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/updateBook/:id' element={<UpdateBook />} />
         <Route path='view-book-details/:id' element={<ViewBookDetails />} />
+<<<<<<< HEAD
+=======
+          {/* New Route for BookListByCategory */}
+          <Route path='/books/category/:categoryId' element={<BookListByCategory />} />
+          {/* <Route path='/books/category/:categoryId/:subcategoryId' element={<BookListByCategory />} /> */}
+>>>>>>> b38785e597742122962a30f530ad549743115f38
       </Routes>
       <Footer />
     </div>
